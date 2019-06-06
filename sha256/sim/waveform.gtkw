@@ -1,0 +1,74 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Tue Jun  4 09:39:44 2019
+[*]
+[dumpfile] "/media/nasm/toshi/hw-snapshotting/verilator/sha256/sim/obj_dir/simx.vcd"
+[dumpfile_mtime] "Tue Jun  4 09:39:44 2019"
+[dumpfile_size] 786215685
+[savefile] "/media/nasm/toshi/hw-snapshotting/verilator/sha256/sim/waveform.gtkw"
+[timestart] 10
+[size] 1637 995
+[pos] -1 -1
+*-1.907300 14 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.top.
+[treeopen] top.top.sha256_v1_0.
+[treeopen] top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.
+[sst_width] 223
+[signals_width] 190
+[sst_expanded] 1
+[sst_vpaned_height] 291
+@28
+[color] 7
+top.top.sha256_v1_0.s00_axi_aclk
+[color] 2
+top.top.sha256_v1_0.s00_axi_aresetn
+@22
+[color] 3
+top.top.sha256_v1_0.s00_axi_awaddr[31:0]
+@28
+top.top.sha256_v1_0.s00_axi_awvalid
+top.top.sha256_v1_0.s00_axi_awready
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.aw_en
+@22
+[color] 3
+top.top.sha256_v1_0.s00_axi_wdata[31:0]
+@28
+top.top.sha256_v1_0.s00_axi_wvalid
+@22
+top.top.sha256_v1_0.s00_axi_wstrb[3:0]
+@28
+top.top.sha256_v1_0.s00_axi_wready
+top.top.sha256_v1_0.s00_axi_bresp[1:0]
+@29
+top.top.sha256_v1_0.s00_axi_bvalid
+@28
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_bvalid
+top.top.sha256_v1_0.s00_axi_bready
+@22
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(0)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(1)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(2)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(3)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(4)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(5)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(6)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(7)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(8)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(9)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(10)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(11)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(12)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(13)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(14)[31:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.block_reg(15)[31:0]
+@28
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_awready
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.S_AXI_AWVALID
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_bvalid
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_wready
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.S_AXI_WVALID
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_bresp[1:0]
+top.top.sha256_v1_0.sha256_v1_0_S00_AXI_inst.axi_bvalid
+[pattern_trace] 1
+[pattern_trace] 0

@@ -1,0 +1,9 @@
+<_exit>:
+080002C4:   80 B4                       	push	{r7}
+
+080002C6:   00 AF                       	add	r7, sp, #0x0
+
+080002C8:   00 BF                       	nop
+
+080002CA:   FD E7                       	b	#-0x6
+
