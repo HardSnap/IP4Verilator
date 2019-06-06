@@ -209,55 +209,29 @@ public:
     // mtx.lock();
 
     // Put read address on bus
-    top->read_addr = address;
+    top->read_addr = address; // axi_araddr
     // Indicate address is valid
-    top->read_addr_valid = 1;
+    top->read_addr_valid = 1; // axi_arvalid
     // Indicate data ready
-    top->read_data_ready = 1;
-
-    top->eval();
+    top->read_data_ready = 1; // axi_rready
+    clock(1);
 
     //wait for one slave ready signal or the other
-    // wait(write_data_ready || write_addr_ready);
-    while((top->read_data_valid == false) && (top->read_addr_ready == false)) {
-      clock(1);
+    //while((top->read_data_valid == false) && (top->read_addr_ready == false)) {
+    while(top->read_addr_ready == 0) {
+        top->eval();
     }
     clock(1);
 
-    //received both ready signals
-    // if(top->read_data_valid && top->read_addr_ready ) {
-    //   top->read_data_ready = 0;
-    //   top->read_addr_valid = 0;
-    //   top->eval();
-    // } else {
-    //   //wait for the other signal and a positive edge
-    //   if(top->read_data_valid) {
-    //     //case data handshake completed
-    //     top->read_data_ready = 0;
-    //     top->eval();
-    //     // wait(write_addr_ready); //wait for address address ready
-    //     while(top->read_addr_ready == false) {
-    //       clock(1);
-    //     }
-    //   } else if(top->read_addr_ready) {
-    //   //case address handshake completed
-    //     top->read_addr_valid =0;
-    //     top->eval();
-    //     // wait(write_data_ready); //wait for data ready
-    //     while(top->read_data_valid == false) {
-    //       clock(1);
-    //     }
-    //   }
-
-    top->read_data_ready =0; //make sure both valid signals are deasserted
     top->read_addr_valid =0;
     top->eval();
-    // }
-    // top->eval();
-
-    clock(1);
 
     uint32_t res = top->read_data;
+
+    top->read_data_ready =0;
+    top->eval();
+
+    clock(1);
 
     // mtx.unlock();
 
