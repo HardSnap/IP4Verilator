@@ -67,6 +67,8 @@ void sigterm_handling() {
   sigaction(SIGTERM, &_sigact, NULL);
 }
 
+bool execute_self_test();
+
 int main(int argc, char **argv) {
 
   // Catch SIGTERM signal
@@ -80,7 +82,9 @@ int main(int argc, char **argv) {
   Verilated::debug(0);
   Verilated::traceEverOn(true);
 
-  Simulator* master = new Simulator();
+  if(!execute_self_test())
+	  std::cout << "[TEST] Fail" << std::endl;
+
   // IO* io = new IO(master);
 
   // std::thread simulator(&Simulator::run,  master);
@@ -89,9 +93,15 @@ int main(int argc, char **argv) {
   // simulator.join();
   // io->running = false;
   // com.join();
+}
+
+bool execute_self_test() {
+
+  Simulator* master = new Simulator();
 
   master->run();
 
+  std::cout << "[TEST] Computing hash for string 'abc'" << std::endl;
   master->input(0x61626380, 20);
   master->input(0x00000000, 24);
   master->input(0x00000000, 28);
@@ -116,18 +126,31 @@ int main(int argc, char **argv) {
     master->clock(1);
   } while (master->output(0) == 0);
 
-  master->output(84);
-  master->output(88);
-  master->output(92);
-  master->output(96);
-  master->output(100);
-  master->output(104);
-  master->output(108);
-  master->output(112);
+  unsigned int expected_hash[] = {0xba7816bf, 0x8f01cfea, 0x414140de, 0x5dae2223, 0xb00361a3, 0x96177a9c, 0xb410ff61, 0xf20015ad};
+
+  std::cout << "[TEST] Comparing result" << std::endl;
+  for(int i=0; i<8; i++) {
+    unsigned int chunk = master->output(84+(i*4));
+
+    if(chunk != expected_hash[7-i])
+      return false;
+    else
+      std::cout << std::hex << chunk << "-";
+  }
+  std::cout << std::endl;
+
+  //master->output(84);
+  //master->output(88);
+  //master->output(92);
+  //master->output(96);
+  //master->output(100);
+  //master->output(104);
+  //master->output(108);
+  //master->output(112);
 
   master->shutdown();
 
-  std::cout << "Shutting down simulator" << std::endl;
+  std::cout << "[TEST] Success" << std::endl;
 
-  return 0;
+  return true;
 }
