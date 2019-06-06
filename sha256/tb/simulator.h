@@ -128,7 +128,7 @@ public:
 
   void input(uint32_t data, uint32_t address) {
     // address -= 0x43c00000;
-    std::cout << "[Simulator::model]  Write command at " << std::hex << address << " " << data << std::endl;
+    //std::cout << "[Simulator::model]  Write command at " << std::hex << address << " " << data << std::endl;
 
     // mtx.lock();
 
@@ -203,7 +203,7 @@ public:
 
   uint32_t output(uint32_t address) {
     // address -= 0x43c00000;
-    std::cout << "[Simulator::model] Read command at " << std::hex << address << std::endl;
+    //std::cout << "[Simulator::model] Read command at " << std::hex << address << std::endl;
 
     // address -= 0x43c00000;
     // mtx.lock();
@@ -235,7 +235,7 @@ public:
 
     // mtx.unlock();
 
-    std::cout << "[Simulator::model] Result : " << std::hex << res << std::endl;
+    //std::cout << "[Simulator::model] Result : " << std::hex << res << std::endl;
     return res;
   }
 
