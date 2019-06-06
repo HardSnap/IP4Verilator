@@ -19,39 +19,77 @@
 #include <iomanip>
 
 class IO {
+private:
+    uint32_t address;
+    uint32_t data_in;
+    uint32_t data_out;
+    char     action;
+    unsigned char buffer[12];
+
 public:
 
-  IO(Simulator* _master) {
-    master = _master;
-    running = true;
-  }
+    IO(Simulator* _master) {
+        master = _master;
+        running = true;
 
-  ~IO() { stop(); };
+        sync_mem_ptr[0] = 0;
+        sync_mem_ptr[1] = 0;
+        sync_mem_ptr[2] = 0;
 
-  void input(uint32_t data, uint32_t address) {
-    master->input(data, address);
-  }
+        memset(buffer, 0, 12);
+    }
 
-  uint32_t output(uint32_t address) {
-    return master->output(address);
-  }
+    ~IO() { stop(); };
+
+    void input(uint32_t data, uint32_t address) {
+        master->input(data, address);
+    }
+
+    uint32_t output(uint32_t address) {
+        return master->output(address);
+    }
+
+    bool has_message() {
+        int n = 0;
+
+        while (read(cmd_fifo, buffer, sizeof(buffer)) == 0);
+        sync_mem_ptr[0] = 0;
+
+        address  = *((uint32_t*)&buffer[4]);
+        data_in  = *((uint32_t*)&buffer[8]);
+        action   = buffer[0];
+    }
+
+    void process() {
+
+        switch(action) {
+            case 'W': {
+                input(data_in, address);
+                }
+            break;
+            case 'R': {
+                data_out = output(address);
+
+                char* res = new char[5];
+                res[0] = data_out >> 24;
+                res[1] = data_out >> 16;
+                res[2] = data_out >> 8;
+                res[3] = data_out & 0xFF;
+                res[4] = 0;
+
+                while(sync_mem_ptr[1] == 1);
+                sync_mem_ptr[1] = 1;
+
+                while( write(data_fifo, res, 5) == 0);
+                }
+            break;
+            default:
+            break;
+            }
+    }
 
   void run() {
     start();
-
-    #define TEST_MODE 1
-    #ifdef TEST_MODE
-    input(0, 0xABABABAB);
-    input(4, 0xABABABAB);
-    input(8, 0xABABABAB);
-
-    output(4);
-
-    for(int k=0; k<100000; k++) {
-      asm("nop");
-    }
-    return;
-    #endif
 
     sync_mem_ptr[0] = 0;
     sync_mem_ptr[1] = 0;
@@ -62,23 +100,10 @@ public:
       unsigned char buffer[12] = {0};
       int n = 0;
 
-      // if ((n = recv(client, buffer, sizeof buffer, 0)) < 0) {
-      //   std::cout << "[Simulator::net] Unable to receive command" << std::endl;
-      // }
-
-      // std::cout << "[Simulator::net] Waiting for data on cmd_fifo" << std::endl;
-
       while (read(cmd_fifo, buffer, sizeof(buffer)) == 0);
       std::cout << "[Simulator::net] done" << std::endl;
 
       sync_mem_ptr[0] = 0;
-
-      // if(n!= 12) {
-      //   if(n>0)
-      //     std::cout << "[Simulator::net] Bad packet of size " << n << std::endl;
-      //   continue;
-      // }
-      // std::cout << "[Simulator::net] Good packet of size " << n << std::endl;
 
       uint32_t address  = *((uint32_t*)&buffer[4]);
       uint32_t data_in  = *((uint32_t*)&buffer[8]);
@@ -125,26 +150,6 @@ public:
     }
   }
 
-  void stop() {
-    // close(sockfd);
-    // close(client);
-  }
-
-  bool running;
-
-private:
-  Simulator* master;
-
-  // int sockfd;
-  //
-  // int client;
-  //
-  // int portno;
-
-  int cmd_fifo;
-
-  int data_fifo;
-
   void start() {
 
     return;
@@ -168,6 +173,26 @@ private:
 
     std::cout << "[Simulator::net] Ready" << std::endl;
   }
+
+  void stop() {
+    // close(sockfd);
+    // close(client);
+  }
+
+  bool running;
+
+private:
+  Simulator* master;
+
+  // int sockfd;
+  //
+  // int client;
+  //
+  // int portno;
+
+  int cmd_fifo;
+
+  int data_fifo;
 
   // void start() {
   //   portno = 2017;

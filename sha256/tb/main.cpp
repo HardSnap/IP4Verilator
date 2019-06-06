@@ -69,22 +69,36 @@ void sigterm_handling() {
 
 bool execute_self_test();
 
+bool running;
+
 int main(int argc, char **argv) {
 
   // Catch SIGTERM signal
   sigterm_handling();
 
-  // #ifndef TEST_MODE
-  // init_shared_memory();
-  // #endif
+  init_shared_memory();
 
   Verilated::commandArgs(argc, argv);
   Verilated::debug(0);
   Verilated::traceEverOn(true);
 
+  // test the hardware model
   if(!execute_self_test())
 	  std::cout << "[TEST] Fail" << std::endl;
 
+  // start comm interface
+  Simulator* master = new Simulator();
+  IO* io = new IO(master);
+  io->start();
+
+  running = true;
+  while(running) {
+    if( io->has_message() ) {
+	io->process();
+    } else {
+        master->clock(1);
+    }
+  }
   // IO* io = new IO(master);
 
   // std::thread simulator(&Simulator::run,  master);
