@@ -67,7 +67,7 @@ check_and_rtl_template () {
   module_name=$(grep -r "module " $file_path | awk -F' ' '{print $2}')
   read -p "Found top module name : $module_name, correct ? [Y/n]" answer
   if [ "$answer" == "Y" ] || [ "$answer" == "y" ]; then
-    sed "s/@TOP_MODULE_NAME@/${module_name}/g" $dir_name/rtl/tb_axi_lite_slave.v  > /dev/null 2>&1
+    sed -i "s/@TOP_MODULE_NAME@/${module_name}/g" $dir_name/rtl/tb_axi_lite_slave.v
   else
     echo "Cannot continue..."
     exit 0
@@ -79,6 +79,7 @@ check_and_rtl_template () {
 # Third step: check if sim driver exist
 check_if_sim_driver_exist () {
   eval "${1}"
+  eval "${2}"
 
   file_count=$(find ../system/lib -name "$SIM_DRIVER.cpp" | wc -l)
   if [[ $file_count -ne 1 ]]; then
@@ -86,12 +87,16 @@ check_if_sim_driver_exist () {
       exit 0
   fi
 
+  cp ../system/lib/sim_driver/$SIM_DRIVER.cpp $dir_name/tb/sim.cpp
+  cp ../system/lib/sim_driver/$SIM_DRIVER.h $dir_name/tb/sim.h
+
   return 0;
 }
 
 # Fourth step: check if net driver exist
 check_if_net_driver_exist () {
   eval "${1}"
+  eval "${2}"
 
   echo $NET_DRIVER
 
@@ -100,6 +105,9 @@ check_if_net_driver_exist () {
       echo "$NET_DRIVER is not a valid simulator driver! Please check ../system/lib/net for valid file"
       exit 0
   fi
+
+  cp ../system/lib/net/$NET_DRIVER.cpp $dir_name/tb/net.cpp
+  cp ../system/lib/net/$NET_DRIVER.h $dir_name/tb/net.h
 
   return 0;
 }
@@ -210,10 +218,10 @@ create_destination_dir_for $_arg_ip_path
 check_and_rtl_template $_arg_ip_path $_arg_top_rtl
 
 # Third step: check if sim driver exist
-check_if_sim_driver_exist $_arg_sim_driver
+check_if_sim_driver_exist $_arg_ip_path $_arg_sim_driver
 
 # Fourth step: check if net driver exist
-check_if_net_driver_exist $_arg_net_driver
+check_if_net_driver_exist $_arg_ip_path $_arg_net_driver
 
 # Finally, create main.cpp file
 create_main_file $SIM_DRIVER $NET_DRIVER

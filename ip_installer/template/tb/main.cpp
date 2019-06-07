@@ -67,7 +67,7 @@ int main(int argc, char **argv) {
   // than socket. But please check CRIU limitation first!
   AbstractNet *net = new MKFifoNet();
 
-  SimulatorDriver *simulator = new SimulatorDriver();
+  AbstractSimulator *simulator = new AXISimulatorDriver();
 
   // System is compiled statically and linked with this program It avoids
   // recompiling all the stuff and having many times the same files in each
