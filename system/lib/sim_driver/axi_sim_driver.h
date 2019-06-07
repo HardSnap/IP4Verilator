@@ -6,6 +6,8 @@
 #ifndef INCEPTION_APB_MASTER_H
 #define INCEPTION_APB_MASTER_H
 
+#include "abstract_simulator.h"
+
 #include <iostream>
 #include <mutex>
 #include <thread>

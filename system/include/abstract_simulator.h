@@ -7,6 +7,8 @@
 #ifndef ABSTRACT_SIMULATOR_H
 #define ABSTRACT_SIMULATOR_H
 
+#include <stdint.h>
+
 class AbstractSimulator {
 
 public:
