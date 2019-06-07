@@ -1,5 +1,4 @@
-#include "simulator_driver.h"
-#include "external_interface.h"
+#include "axi_sim_driver.h"
 
 extern std::mutex mtx;
 
@@ -13,7 +12,7 @@ vluint64_t sim_time;
 double sc_time_stamp() { return main_time; }
 #endif
 
-SimulatorDriver::SimulatorDriver() {
+AXISimulatorDriver::AXISimulatorDriver() {
   top = new Vtop("top");
 
 #if TRACE
@@ -29,13 +28,13 @@ SimulatorDriver::SimulatorDriver() {
   running = false;
 }
 
-SimulatorDriver::~SimulatorDriver() {
+AXISimulatorDriver::~AXISimulatorDriver() {
   delete top;
 
   exit(0);
 }
 
-void SimulatorDriver::clock(uint32_t cycles) {
+void AXISimulatorDriver::clock(uint32_t cycles) {
   for (uint32_t i = 0; i < (cycles * 2); i++) {
     top->eval();
     top->clk_i = ~top->clk_i;
@@ -46,7 +45,7 @@ void SimulatorDriver::clock(uint32_t cycles) {
   }
 }
 
-void SimulatorDriver::init() {
+void AXISimulatorDriver::init() {
   // Master write address
   top->write_addr = 0;
   // type of write(leave at 0)
@@ -103,7 +102,7 @@ void SimulatorDriver::init() {
   clock(1);
 }
 
-void SimulatorDriver::run() {
+void AXISimulatorDriver::run() {
 
   init();
 
@@ -116,7 +115,7 @@ void SimulatorDriver::run() {
   }
 }
 
-void SimulatorDriver::input(uint32_t data, uint32_t address) {
+void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
   mtx.lock();
 
   // #3 write_addr <= addr;	//Put write address on bus
@@ -186,7 +185,7 @@ void SimulatorDriver::input(uint32_t data, uint32_t address) {
   mtx.unlock();
 }
 
-uint32_t SimulatorDriver::output(uint32_t address) {
+uint32_t AXISimulatorDriver::output(uint32_t address) {
   mtx.lock();
 
   // Put read address on bus
@@ -219,7 +218,7 @@ uint32_t SimulatorDriver::output(uint32_t address) {
   return res;
 }
 
-void SimulatorDriver::shutdown() {
+void AXISimulatorDriver::shutdown() {
   Verilated::gotFinish(true);
   running = false;
 

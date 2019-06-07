@@ -19,12 +19,12 @@ using namespace std;
 // Include model header, generated from Verilating "sha256_top.v"
 #include "Vtop.h"
 
-class SimulatorDriver {
+class AXISimulatorDriver : public AbstractSimulator {
 
 public:
-  SimulatorDriver();
+  AXISimulatorDriver();
 
-  ~SimulatorDriver();
+  ~AXISimulatorDriver();
 
   /*
    * Brief: generate one cycle in the simulator by driving the main clock

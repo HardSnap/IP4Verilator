@@ -3,6 +3,8 @@
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
+std::mutex mtx;
+
 System::System() { running = false; }
 
 System::~System() {}
