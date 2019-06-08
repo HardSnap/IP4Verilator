@@ -1,4 +1,4 @@
-#include "axi_sim_driver.h"
+#include "sim.h"
 
 extern std::mutex mtx;
 

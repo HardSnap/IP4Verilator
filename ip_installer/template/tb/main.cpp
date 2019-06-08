@@ -7,9 +7,9 @@
 #include <signal.h>
 #include <string.h>
 
-#include "system.h"
+#include "simulator_system.h"
 
-System *system;
+SimulatorSystem *sys = NULL;
 
 /*
  * Catch process signal to close the simulator using the right way
@@ -62,13 +62,13 @@ int main(int argc, char **argv) {
    */
 
   // Instantiate System
-  system = new System();
+  sys = new SimulatorSystem();
 
   // Here you can relplace MKFifoNet by any class that inherits from AbstractNet
   // For instance you could use UDP or TCP socket instead depending on what you
   // matter of. It seems that mkfifo have less latency and highest throughput
   // than socket. But please check CRIU limitation first!
-  AbstractNet *net = new MKFifoNet();
+  AbstractNet *net;// = new MKFifoNet();
 
   AbstractSimulator *simulator = new AXISimulatorDriver();
 
@@ -77,14 +77,14 @@ int main(int argc, char **argv) {
   // project. To connect components together we use the system class This class
   // will also manage the execution and turn components off when closing the
   // program
-  if (!system->set_network(net))
+  if (!sys->set_network(net))
     spdlog::error("Unable to init network interface");
 
-  if (!system->append_target(simulator, 0x0, 0x200))
+  if (!sys->append_target(simulator, 0x0, 0x200))
     spdlog::error("Unable to init simulator");
 
   // Blocking function
-  system->run();
+  sys->run();
 
   spdlog::info("All components are down! Good Bye!");
 }
@@ -147,7 +147,8 @@ bool execute_self_test() {
 void sig_handler(int sig) {
 
   spdlog::info("Shutting down components...");
-  system->shutdown();
+  if(sys != NULL)
+    sys->shutdown();
   spdlog::info("Components are done");
 
   exit(1);

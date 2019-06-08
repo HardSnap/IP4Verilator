@@ -1,5 +1,5 @@
 ADD_LIBRARY(simulator_system STATIC
-  system.cpp
+  simulator_system.cpp
 )
 
 target_link_libraries(simulator_system pthread)

@@ -77,7 +77,7 @@ endif
 CFLAGS       += -CFLAGS -I../../tb/
 CFLAGS       += -CFLAGS -I../../../system/include
 
-LDFLAGS     = -LDFLAGS "-lpthread -lrt -lsimulator_system"
+LDFLAGS     = -LDFLAGS "-lpthread -lrt -L../../../system/bin/ -lsimulator_system"
 
 ######################################################################
 

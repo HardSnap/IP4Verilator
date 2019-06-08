@@ -1,15 +1,15 @@
-#include "system.h"
+#include "simulator_system.h"
 
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
 std::mutex mtx;
 
-System::System() { running = false; }
+SimulatorSystem::SimulatorSystem() { running = false; }
 
-System::~System() {}
+SimulatorSystem::~SimulatorSystem() {}
 
-bool System::set_network(AbstractNet *_net) {
+bool SimulatorSystem::set_network(AbstractNet *_net) {
 
   if (net == NULL) {
     net = _net;
@@ -20,7 +20,7 @@ bool System::set_network(AbstractNet *_net) {
   }
 }
 
-bool System::append_target(AbstractSimulator *_sim, uint32_t _base_address,
+bool SimulatorSystem::append_target(AbstractSimulator *_sim, uint32_t _base_address,
                            uint32_t _size) {
 
   std::thread task(&AbstractSimulator::run, _sim);
@@ -30,7 +30,7 @@ bool System::append_target(AbstractSimulator *_sim, uint32_t _base_address,
   targets.push_back(target);
 }
 
-Target *System::resolve_target(uint32_t address) {
+Target *SimulatorSystem::resolve_target(uint32_t address) {
 
   for (auto it = targets.begin(); it != targets.end(); it++) {
     Target *target = *it;
@@ -44,11 +44,11 @@ Target *System::resolve_target(uint32_t address) {
   return NULL;
 }
 
-void System::run() {
+void SimulatorSystem::run() {
 
   if (targets.empty() || net == NULL) {
     spdlog::error(
-        "System cannot run because no target are present or net interface "
+        "SimulatorSystem cannot run because no target are present or net interface "
         "not specified");
   }
 
@@ -59,7 +59,7 @@ void System::run() {
   }
 }
 
-void System::process(Message *msg) {
+void SimulatorSystem::process(Message *msg) {
 
   if (msg == NULL)
     return;
@@ -76,7 +76,7 @@ void System::process(Message *msg) {
     spdlog::error("Ignored message: unknown field type");
 }
 
-void System::shutdown() {
+void SimulatorSystem::shutdown() {
 
   // Wait for targets to complete all commands before shutdown
   for (auto it = targets.begin(); it != targets.end(); it++) {

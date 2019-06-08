@@ -29,7 +29,7 @@ public:
       : sim(_sim), base_address(_base_address), size(_size), task(_task){};
 };
 
-class System {
+class SimulatorSystem {
 private:
   bool running;
 
@@ -40,9 +40,9 @@ private:
   AbstractNet *net;
 
 public:
-  System();
+  SimulatorSystem();
 
-  ~System();
+  ~SimulatorSystem();
 
   void run();
 
