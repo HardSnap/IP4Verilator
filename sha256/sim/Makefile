@@ -64,7 +64,7 @@ TOP_RTL_FILE = $(patsubst %,%.sv,$(TOP_RTL))
 RTL_PATH     = ../rtl/
 RTL_FILES    =  $(shell find $(RTL_PATH) -name '*.v')
 RTL_FILES    += $(shell find $(RTL_PATH) -name '*.sv')
-SC_TB_FILE   = ../tb/main.cpp ../tb/external_interface.cpp ../tb/simulator_driver.cpp
+SC_TB_FILE   = ../tb/main.cpp ../tb/net.cpp ../tb/sim.cpp
 OBJ_DIR      = obj_dir
 EXE          = simu
 
@@ -75,8 +75,9 @@ CFLAGS       = -CFLAGS -O3 -CFLAGS -std=c++11
 endif
 
 CFLAGS       += -CFLAGS -I../../tb/
+CFLAGS       += -CFLAGS -I../../../system/include
 
-LDFLAGS     = -LDFLAGS "-lpthread -lrt"
+LDFLAGS     = -LDFLAGS "-lpthread -lrt -L../../../system/bin/ -lsimulator_system"
 
 ######################################################################
 
