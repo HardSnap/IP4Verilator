@@ -45,7 +45,7 @@ void AXISimulatorDriver::clock(uint32_t cycles) {
   }
 }
 
-void AXISimulatorDriver::init() {
+bool AXISimulatorDriver::init() {
   // Master write address
   top->write_addr = 0;
   // type of write(leave at 0)
@@ -100,11 +100,21 @@ void AXISimulatorDriver::init() {
 
   top->rst_ni = 1;
   clock(1);
+
+  return true;
+}
+
+std::thread *AXISimulatorDriver::start() {
+
+  // System cannot make the thread init since it is compiled before we define
+  // which SimulatorDriver we will use!
+  std::thread task(&AXISimulatorDriver::run, this);
+  task.detach();
+
+  return &task;
 }
 
 void AXISimulatorDriver::run() {
-
-  init();
 
   // while (!Verilated::gotFinish()) {
   running = true;
@@ -117,6 +127,8 @@ void AXISimulatorDriver::run() {
 
 void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
   mtx.lock();
+
+  printf("AXISimulatorDriver: writing %08x to %08x\n", data, address);
 
   // #3 write_addr <= addr;	//Put write address on bus
   top->write_addr = address;
@@ -180,7 +192,7 @@ void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
 
   // deassert ready for response
   top->write_resp_ready = 0;
-  clock(1);
+  clock(100);
 
   mtx.unlock();
 }
@@ -214,6 +226,8 @@ uint32_t AXISimulatorDriver::output(uint32_t address) {
   clock(1);
 
   mtx.unlock();
+
+  printf("AXISimulatorDriver: reading from %08x -> %08x\n", address, res);
 
   return res;
 }

@@ -1,38 +1,20 @@
+#include "net.h"
+#include "sim.h"
+
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
-#include <fcntl.h>
-#include <mutex>
-#include <netinet/in.h>
+
 #include <signal.h>
 #include <string.h>
-#include <sys/mman.h>
-#include <sys/stat.h>
 
-#include "external_interface.h"
-#include "simulator_driver.h"
+#include "simulator_system.h"
 
-std::mutex mtx;
-
-// Shared memory between threads and Klee
-u_char *sync_mem_ptr;
-
-// SimulatorDriver ptr made global to close it properly when sigterm is emitted
-SimulatorDriver *sim;
-std::thread *sim_thread;
-// ExternalInterface ptr made global to close it properly when sigterm is
-// emitted
-ExternalInterface *io;
-std::thread *io_thread;
+SimulatorSystem *sys = NULL;
 
 /*
  * Catch process signal to close the simulator using the right way
  */
-// void sig_term_handler(int signum, siginfo_t *info, void *ptr);
-// void sigterm_handling();
-
-void init_shared_memory();
-
-void sigint_handler(int sig);
+void sig_handler(int sig);
 
 /*
  * Execute self test before running core functions
@@ -43,12 +25,10 @@ bool execute_self_test();
 int main(int argc, char **argv) {
 
   // Catch SIGTERM signal
-  // sigterm_handling();
-  signal(SIGINT, sigint_handler);
-  signal(SIGTERM, sigint_handler);
-  signal(SIGKILL, sigint_handler);
-
-  init_shared_memory();
+  signal(SIGINT, sig_handler);
+  signal(SIGTERM, sig_handler);
+  signal(SIGKILL, sig_handler);
+  signal(SIGABRT, sig_handler);
 
   /*
    * Initialize Verilator
@@ -63,6 +43,7 @@ int main(int argc, char **argv) {
    * Initialize logger
    */
   auto file_logger = spdlog::basic_logger_mt("basic_logger", "logs/run.log");
+  file_logger->flush_on(spdlog::level::info);
   spdlog::set_default_logger(file_logger);
   spdlog::info("Starting self test...");
   spdlog::info("Author : Corteggiani Nassim");
@@ -82,25 +63,44 @@ int main(int argc, char **argv) {
    * FIFO is no full.
    */
 
-  // Instantiate simulator and comm interface
-  sim = new SimulatorDriver();
-  io = new ExternalInterface(sim);
+  // Instantiate System
+  sys = new SimulatorSystem();
 
-  // Start simulator and comm interface
-  std::thread simulator(&SimulatorDriver::run, sim);
-  sim_thread = &simulator;
+  // Here you can relplace MKFifoNet by any class that inherits from AbstractNet
+  // For instance you could use UDP or TCP socket instead depending on what you
+  // matter of. It seems that mkfifo have less latency and highest throughput
+  // than socket. But please check CRIU limitation first!
+  AbstractNet *net = new MKFifo();
 
-  std::thread com(&ExternalInterface::run, io);
-  io_thread = &com;
+  AbstractSimulator *simulator = new AXISimulatorDriver();
 
-  com.join();
-  sim->shutdown();
-  simulator.join();
+  // System is compiled statically and linked with this program It avoids
+  // recompiling all the stuff and having many times the same files in each
+  // project. To connect components together we use the system class This class
+  // will also manage the execution and turn components off when closing the
+  // program
+  if (!sys->set_network(net)) {
+    spdlog::error("Unable to init network interface");
+    return 0;
+  }
+  spdlog::error("Network inteface is up.");
+
+  if (!sys->append_target(simulator, 0x0, 0x200)) {
+    spdlog::error("Unable to init simulator");
+    return 0;
+  }
+  spdlog::error("Target simulator is up.");
+
+  // Blocking function
+  spdlog::error("Running system components.");
+  sys->run();
+
+  spdlog::info("All components are down! Good Bye!");
 }
 
 bool execute_self_test() {
 
-  SimulatorDriver *sim = new SimulatorDriver();
+  AXISimulatorDriver *sim = new AXISimulatorDriver();
 
   sim->init();
 
@@ -153,78 +153,12 @@ bool execute_self_test() {
   return true;
 }
 
-void sig_term_handler(int signum, siginfo_t *info, void *ptr) {
-
-  // Wait for communication completion
-  while (sync_mem_ptr[0] == 1 || sync_mem_ptr[1] == 1)
-    ;
-
-  // Notify watcher from completion
-  sync_mem_ptr[2] = 1;
+void sig_handler(int sig) {
 
   spdlog::info("Shutting down components...");
-  sim->shutdown();
-  io->shutdown();
-
-  sim_thread->join();
-  io_thread->join();
+  if (sys != NULL)
+    sys->shutdown();
   spdlog::info("Components are done");
 
   exit(1);
 }
-
-void init_shared_memory() {
-  const char *sync_path = "/sync_fifo";
-
-  // Create a shared memory object
-  int sync_mem = shm_open(sync_path, O_CREAT | O_RDWR, 0644);
-  if (sync_mem == -1) {
-    perror("Failed to open sync_mem for simulator synchronisation");
-    exit(-1);
-  }
-
-  // Set the size
-  ftruncate(sync_mem, 8);
-
-  // Map the shared memory in this process
-  sync_mem_ptr =
-      (u_char *)mmap(NULL, 8, PROT_READ | PROT_WRITE, MAP_SHARED, sync_mem, 0);
-  if (sync_mem_ptr == MAP_FAILED) {
-    perror("Failed to map sync_mem for simulator synchronisation");
-    exit(-1);
-  }
-}
-
-void sigint_handler(int sig) {
-  printf("Good bye!!!\n");
-
-  // Wait for communication completion
-  while (sync_mem_ptr[0] == 1 || sync_mem_ptr[1] == 1)
-    ;
-
-  // Notify watcher from completion
-  sync_mem_ptr[2] = 1;
-
-  spdlog::info("Shutting down components...");
-  sim->shutdown();
-  io->shutdown();
-
-  sim_thread->join();
-  io_thread->join();
-  spdlog::info("Components are done");
-
-  exit(1);
-}
-
-// void sigterm_handling() {
-//   static struct sigaction _sigact;
-//
-//   memset(&_sigact, 0, sizeof(_sigact));
-//
-//   _sigact.sa_sigaction = sig_term_handler;
-//   _sigact.sa_flags = SA_SIGINFO;
-//
-//   sigaction(SIGTERM, &_sigact, NULL);
-//
-//   signal(SIGINT, sigint_handler);
-// }

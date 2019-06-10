@@ -8,6 +8,7 @@
 #define ABSTRACT_SIMULATOR_H
 
 #include <stdint.h>
+#include <thread>
 
 class AbstractSimulator {
 
@@ -45,7 +46,12 @@ public:
    * Brief: Initialize top signals before running simulation
    * This methods is called by run when using multi-threaded mode
    */
-  virtual void init() = 0;
+  virtual bool init() = 0;
+
+  /*
+   * Brief: Initialize thread and return pointer to it
+   */
+  virtual std::thread *start() = 0;
 };
 
 #endif

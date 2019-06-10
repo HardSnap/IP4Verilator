@@ -1,5 +1,4 @@
-#include "simulator_driver.h"
-#include "external_interface.h"
+#include "sim.h"
 
 extern std::mutex mtx;
 
@@ -13,7 +12,7 @@ vluint64_t sim_time;
 double sc_time_stamp() { return main_time; }
 #endif
 
-SimulatorDriver::SimulatorDriver() {
+AXISimulatorDriver::AXISimulatorDriver() {
   top = new Vtop("top");
 
 #if TRACE
@@ -29,13 +28,13 @@ SimulatorDriver::SimulatorDriver() {
   running = false;
 }
 
-SimulatorDriver::~SimulatorDriver() {
+AXISimulatorDriver::~AXISimulatorDriver() {
   delete top;
 
   exit(0);
 }
 
-void SimulatorDriver::clock(uint32_t cycles) {
+void AXISimulatorDriver::clock(uint32_t cycles) {
   for (uint32_t i = 0; i < (cycles * 2); i++) {
     top->eval();
     top->clk_i = ~top->clk_i;
@@ -46,7 +45,7 @@ void SimulatorDriver::clock(uint32_t cycles) {
   }
 }
 
-void SimulatorDriver::init() {
+bool AXISimulatorDriver::init() {
   // Master write address
   top->write_addr = 0;
   // type of write(leave at 0)
@@ -101,11 +100,21 @@ void SimulatorDriver::init() {
 
   top->rst_ni = 1;
   clock(1);
+
+  return true;
 }
 
-void SimulatorDriver::run() {
+std::thread *AXISimulatorDriver::start() {
 
-  init();
+  // System cannot make the thread init since it is compiled before we define
+  // which SimulatorDriver we will use!
+  std::thread task(&AXISimulatorDriver::run, this);
+  task.detach();
+
+  return &task;
+}
+
+void AXISimulatorDriver::run() {
 
   // while (!Verilated::gotFinish()) {
   running = true;
@@ -116,8 +125,10 @@ void SimulatorDriver::run() {
   }
 }
 
-void SimulatorDriver::input(uint32_t data, uint32_t address) {
+void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
   mtx.lock();
+
+  printf("AXISimulatorDriver: writing %08x to %08x\n", data, address);
 
   // #3 write_addr <= addr;	//Put write address on bus
   top->write_addr = address;
@@ -181,12 +192,12 @@ void SimulatorDriver::input(uint32_t data, uint32_t address) {
 
   // deassert ready for response
   top->write_resp_ready = 0;
-  clock(1);
+  clock(100);
 
   mtx.unlock();
 }
 
-uint32_t SimulatorDriver::output(uint32_t address) {
+uint32_t AXISimulatorDriver::output(uint32_t address) {
   mtx.lock();
 
   // Put read address on bus
@@ -216,10 +227,12 @@ uint32_t SimulatorDriver::output(uint32_t address) {
 
   mtx.unlock();
 
+  printf("AXISimulatorDriver: reading from %08x -> %08x\n", address, res);
+
   return res;
 }
 
-void SimulatorDriver::shutdown() {
+void AXISimulatorDriver::shutdown() {
   Verilated::gotFinish(true);
   running = false;
 

@@ -3,7 +3,9 @@
 
 #include "message.h"
 
-#include "abstract_net.h"
+class AbstractNet;
+
+// #include "abstract_net.h"
 #include "abstract_simulator.h"
 
 #include <mutex>

@@ -61,7 +61,12 @@ public:
    * Brief: Initialize top signals before running simulation
    * This methods is called by run when using multi-threaded mode
    */
-  void init();
+  bool init();
+
+  /*
+   * Brief: Initialize thread and return pointer to it
+   */
+  std::thread *start();
 
 private:
   /*
@@ -82,7 +87,7 @@ private:
    * This mutex is used to arbitrate access to the simulator as we are in an
    * asynchronous design
    */
-  // std::mutex mtx;
+  std::mutex mtx;
 
   /*
    * While running is true, the run function do not return.

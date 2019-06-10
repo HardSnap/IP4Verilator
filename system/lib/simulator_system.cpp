@@ -1,11 +1,14 @@
 #include "simulator_system.h"
 
+#include "abstract_net.h"
+
 #include "spdlog/sinks/basic_file_sink.h"
 #include "spdlog/spdlog.h"
 
-std::mutex mtx;
-
-SimulatorSystem::SimulatorSystem() { running = false; }
+SimulatorSystem::SimulatorSystem() {
+  running = false;
+  net = NULL;
+}
 
 SimulatorSystem::~SimulatorSystem() {}
 
@@ -13,24 +16,39 @@ bool SimulatorSystem::set_network(AbstractNet *_net) {
 
   if (net == NULL) {
     net = _net;
+
+    if (!net->init()) {
+      return false;
+    }
+
     return true;
   } else {
-    spdlog::info("Network inteface has already been set, cannot overwrite.");
+    spdlog::error("Network inteface has already been set, cannot overwrite.");
     return false;
   }
 }
 
-bool SimulatorSystem::append_target(AbstractSimulator *_sim, uint32_t _base_address,
-                           uint32_t _size) {
+bool SimulatorSystem::append_target(AbstractSimulator *_sim,
+                                    uint32_t _base_address, uint32_t _size) {
+  if (_sim == NULL) {
+    spdlog::error("Append target failed, null argument");
+    return false;
+  }
 
-  std::thread task(&AbstractSimulator::run, _sim);
+  _sim->init();
 
-  Target *target = new Target(_sim, _base_address, _size, &task);
+  std::thread *task = _sim->start();
+
+  Target *target = new Target(_sim, _base_address, _size, task);
 
   targets.push_back(target);
+
+  return true;
 }
 
 Target *SimulatorSystem::resolve_target(uint32_t address) {
+
+  return targets.at(0);
 
   for (auto it = targets.begin(); it != targets.end(); it++) {
     Target *target = *it;
@@ -47,15 +65,17 @@ Target *SimulatorSystem::resolve_target(uint32_t address) {
 void SimulatorSystem::run() {
 
   if (targets.empty() || net == NULL) {
-    spdlog::error(
-        "SimulatorSystem cannot run because no target are present or net interface "
-        "not specified");
+    spdlog::error("SimulatorSystem cannot run because no target are present or "
+                  "net interface "
+                  "not specified");
   }
 
+  running = true;
   while (running) {
-    Message *message = net->read();
+    Message *message = net->receive();
 
-    process(message);
+    if (message != NULL)
+      process(message);
   }
 }
 
@@ -67,11 +87,11 @@ void SimulatorSystem::process(Message *msg) {
   Target *target = resolve_target(msg->address);
 
   if (msg->type == 'W')
-    target->sim->input(msg->address, msg->data);
+    target->sim->input(msg->data, msg->address);
   else if (msg->type == 'R') {
     uint32_t res = target->sim->output(msg->address);
 
-    net->write(res);
+    net->send(res);
   } else
     spdlog::error("Ignored message: unknown field type");
 }

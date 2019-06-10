@@ -28,6 +28,7 @@ int main(int argc, char **argv) {
   signal(SIGINT, sig_handler);
   signal(SIGTERM, sig_handler);
   signal(SIGKILL, sig_handler);
+  signal(SIGABRT, sig_handler);
 
   /*
    * Initialize Verilator
@@ -42,6 +43,7 @@ int main(int argc, char **argv) {
    * Initialize logger
    */
   auto file_logger = spdlog::basic_logger_mt("basic_logger", "logs/run.log");
+  file_logger->flush_on(spdlog::level::info);
   spdlog::set_default_logger(file_logger);
   spdlog::info("Starting self test...");
   spdlog::info("Author : Corteggiani Nassim");
@@ -68,7 +70,7 @@ int main(int argc, char **argv) {
   // For instance you could use UDP or TCP socket instead depending on what you
   // matter of. It seems that mkfifo have less latency and highest throughput
   // than socket. But please check CRIU limitation first!
-  AbstractNet *net;// = new MKFifoNet();
+  AbstractNet *net = new MKFifo();
 
   AbstractSimulator *simulator = new AXISimulatorDriver();
 
@@ -77,13 +79,20 @@ int main(int argc, char **argv) {
   // project. To connect components together we use the system class This class
   // will also manage the execution and turn components off when closing the
   // program
-  if (!sys->set_network(net))
+  if (!sys->set_network(net)) {
     spdlog::error("Unable to init network interface");
+    return 0;
+  }
+  spdlog::error("Network inteface is up.");
 
-  if (!sys->append_target(simulator, 0x0, 0x200))
+  if (!sys->append_target(simulator, 0x0, 0x200)) {
     spdlog::error("Unable to init simulator");
+    return 0;
+  }
+  spdlog::error("Target simulator is up.");
 
   // Blocking function
+  spdlog::error("Running system components.");
   sys->run();
 
   spdlog::info("All components are down! Good Bye!");
@@ -91,63 +100,63 @@ int main(int argc, char **argv) {
 
 bool execute_self_test() {
 
-  // SimulatorDriver *sim = new SimulatorDriver();
-  //
-  // sim->init();
-  //
-  // // std::cout << "[TEST] Computing hash for string 'abc'" << std::endl;
-  // sim->input(0x61626380, 20);
-  // sim->input(0x00000000, 24);
-  // sim->input(0x00000000, 28);
-  // sim->input(0x00000000, 32);
-  // sim->input(0x00000000, 36);
-  // sim->input(0x00000000, 40);
-  // sim->input(0x00000000, 44);
-  // sim->input(0x00000000, 48);
-  // sim->input(0x00000000, 52);
-  // sim->input(0x00000000, 56);
-  // sim->input(0x00000000, 60);
-  // sim->input(0x00000000, 64);
-  // sim->input(0x00000000, 68);
-  // sim->input(0x00000000, 72);
-  // sim->input(0x00000000, 76);
-  // sim->input(0x00000018, 80);
-  //
-  // sim->input(0x00000005, 4);
-  // sim->input(0x00000004, 4);
-  //
-  // do {
-  //   sim->clock(1);
-  // } while (sim->output(0) == 0);
-  //
-  // unsigned int expected_hash[] = {0xba7816bf, 0x8f01cfea, 0x414140de,
-  //                                 0x5dae2223, 0xb00361a3, 0x96177a9c,
-  //                                 0xb410ff61, 0xf20015ad};
-  //
-  // // std::cout << "[TEST] Comparing result" << std::endl;
-  // for (int i = 0; i < 8; i++) {
-  //   unsigned int chunk = sim->output(84 + (i * 4));
-  //
-  //   if (chunk != expected_hash[7 - i]) {
-  //     sim->shutdown();
-  //     return false;
-  //   }
-  //   // else
-  //   //   std::cout << std::hex << chunk << "-";
-  // }
-  // // std::cout << std::endl;
-  //
-  // sim->shutdown();
-  //
-  // // std::cout << "[TEST] Success" << std::endl;
-  //
-  // return true;
+  AXISimulatorDriver *sim = new AXISimulatorDriver();
+
+  sim->init();
+
+  // std::cout << "[TEST] Computing hash for string 'abc'" << std::endl;
+  sim->input(0x61626380, 20);
+  sim->input(0x00000000, 24);
+  sim->input(0x00000000, 28);
+  sim->input(0x00000000, 32);
+  sim->input(0x00000000, 36);
+  sim->input(0x00000000, 40);
+  sim->input(0x00000000, 44);
+  sim->input(0x00000000, 48);
+  sim->input(0x00000000, 52);
+  sim->input(0x00000000, 56);
+  sim->input(0x00000000, 60);
+  sim->input(0x00000000, 64);
+  sim->input(0x00000000, 68);
+  sim->input(0x00000000, 72);
+  sim->input(0x00000000, 76);
+  sim->input(0x00000018, 80);
+
+  sim->input(0x00000005, 4);
+  sim->input(0x00000004, 4);
+
+  do {
+    sim->clock(1);
+  } while (sim->output(0) == 0);
+
+  unsigned int expected_hash[] = {0xba7816bf, 0x8f01cfea, 0x414140de,
+                                  0x5dae2223, 0xb00361a3, 0x96177a9c,
+                                  0xb410ff61, 0xf20015ad};
+
+  // std::cout << "[TEST] Comparing result" << std::endl;
+  for (int i = 0; i < 8; i++) {
+    unsigned int chunk = sim->output(84 + (i * 4));
+
+    if (chunk != expected_hash[7 - i]) {
+      sim->shutdown();
+      return false;
+    }
+    // else
+    //   std::cout << std::hex << chunk << "-";
+  }
+  // std::cout << std::endl;
+
+  sim->shutdown();
+
+  // std::cout << "[TEST] Success" << std::endl;
+
+  return true;
 }
 
 void sig_handler(int sig) {
 
   spdlog::info("Shutting down components...");
-  if(sys != NULL)
+  if (sys != NULL)
     sys->shutdown();
   spdlog::info("Components are done");
 

@@ -10,12 +10,12 @@ class Message;
  */
 class AbstractNet {
 public:
-  virtual void init() = 0;
+  virtual bool init() = 0;
 
   virtual bool shutdown() = 0;
 
-  virtual void write(uint32_t data) = 0;
+  virtual void send(uint32_t data) = 0;
 
-  virtual Message *read() = 0;
+  virtual Message *receive() = 0;
 };
 #endif
