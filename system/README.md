@@ -13,10 +13,10 @@ interface (i.e. socket, pipe, mapped memory, ...) and different design driver
 The two main components of simulator-system are:
 
 * AbstractNet : this class defines the requirements for a creating a Net
-component.
+component. The Net components enables external communication.
 
 * AbstractSimulator : this class defines the requirements for creating a
-simulator driver.
+simulator driver. The Simulator Driver enables internal design read/write access through the peripheral memory interface (.i.e. AXI, Wishbone).
 
 # Compiling ?
 
@@ -28,6 +28,9 @@ cd system
 mkdir build; cd build
 
 cmake ..
+
+# For Debug
+# cmake -DCMAKE_BUILD_TYPE=Debug ..
 
 make
 ```
