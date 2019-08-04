@@ -18,7 +18,7 @@ component. The Net components enables external communication.
 * AbstractSimulator : this class defines the requirements for creating a
 simulator driver. The Simulator Driver enables internal design read/write access through the peripheral memory interface (.i.e. AXI, Wishbone).
 
-# Compiling ?
+# Compilation
 
 The compilation is made easy thanks to cmake!
 
