@@ -58,3 +58,9 @@ run this command in the sim directory
 ```
 mkdir logs
 ```
+
+If at a second run the simulator stop without any error message:
+```
+rm /tmp/cmd_fifo 
+rm /tmp/data_fifo 
+```
