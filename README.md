@@ -64,3 +64,38 @@ If at a second run the simulator stop without any error message:
 rm /tmp/cmd_fifo 
 rm /tmp/data_fifo 
 ```
+
+# Running Inception
+
+First start the simulator program in background.
+```
+./simu &
+```
+
+Then, compile the content of sw directory 
+```
+cd sw && make
+```
+
+In case of custom LLVM installation dir:
+```
+export PATH=/home/nasm/Tools/llvm/build_release/Release+Asserts/bin/:$PATH
+```
+
+This step could be automated and largely improved.
+Inception uses CRIU to generate simulator snapshot.
+However, since CRIU is linked in the Inception-analyzer it cannot fork to start the simulator process.
+Futhermore, CRIU requires root access to work. So the current solution consist in starting the simulator
+first and then set the simulator pid in the Inception-analyzer configuration file (config.json).
+
+```
+pgrep simu
+
+cd sw
+nano config.json
+```
+
+Then, set in section HardwareEnvironment argument pid the value returned by pgrep.
+You can now start Inception-analyzer (in root).
+
+
