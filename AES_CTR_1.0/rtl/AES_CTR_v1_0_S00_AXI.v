@@ -732,8 +732,40 @@
 
     assign key_big = slv_reg32[1] ? key_big2 : ( slv_reg32[0] ? key_big1 : key_big0 );
 
+
+
+    assign interrupt = int_reg;
+    reg int_reg;
+    reg ct_valid_down;
+    
+	  always @( posedge S_AXI_ACLK )
+	  begin
+	    if ( S_AXI_ARESETN == 1'b0 )
+	      begin
+              int_reg       <= 1'b0;
+              ct_valid_down <= 1'b0;
+	      end
+	    else
+	      begin
+              if( (ct_valid == 1'b1) && (ct_valid_down == 1'b0) )
+              begin
+                  int_reg       <= 1'b1;
+                  ct_valid_down <= 1'b1;
+              end else if( (ct_valid == 1'b1) && (ct_valid_down == 1'b1) )
+              begin
+                  int_reg       <= 1'b0;
+              end
+              
+              if( (ct_valid == 1'b0) && (ct_valid_down == 1'b1) )
+              begin
+                  ct_valid_down <= 1'b0;
+              end
+	      end
+	  end
+
     aes_192_sed aes(
         .clk(S_AXI_ACLK),
+        .rstn(S_AXI_ARESETN),
         .state(state_big),
         .p_c_text(p_c_big),
         .key(key_big),

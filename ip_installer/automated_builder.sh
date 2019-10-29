@@ -54,15 +54,15 @@ check_and_rtl_template () {
   eval "${1}"
   eval "${2}"
 
-  file_count=$(find $dir_name -name "$TOP_RTP" | wc -l)
+  file_count=$(find $dir_name -name "$TOP_RTL" | wc -l)
 
   if [[ $file_count -ne 1 ]]; then
-      echo "$TOP_RTP does not exist in $dir_name"
+      echo "$TOP_RTL does not exist in $dir_name"
       exit 0
   fi
 
   # We now need to retrieve the module name to generate our testbench
-  file_path=$(find $dir_name -name "$TOP_RTP")
+  file_path=$(find $dir_name -name "$TOP_RTL")
 
   module_name=$(grep -r "module " $file_path | awk -F' ' '{print $2}')
   read -p "Found top module name : $module_name, correct ? [Y/n]" answer

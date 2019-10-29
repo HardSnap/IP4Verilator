@@ -1,0 +1,30 @@
+[*]
+[*] GTKWave Analyzer v3.3.86 (w)1999-2017 BSI
+[*] Tue Oct 29 09:20:06 2019
+[*]
+[dumpfile] "(null)"
+[savefile] "/home/nasm/Projects/IP4Verilator/WALL_SYSTEM/sim/view.gtkw"
+[timestart] 107470
+[size] 1920 1008
+[pos] -1 -1
+*-2.000000 107484 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] top.
+[treeopen] top.top.
+[treeopen] top.top.pic_axi_interface_inst.
+[sst_width] 272
+[signals_width] 142
+[sst_expanded] 1
+[sst_vpaned_height] 282
+@28
+top.clk_i
+top.rst_ni
+@29
+top.irq_ack
+@28
+top.irq_rq
+@22
+top.top.pic_axi_interface_inst.pic_core_inst.state_reg[3:0]
+@28
+top.top.pic_axi_interface_inst.state_reg[1:0]
+[pattern_trace] 1
+[pattern_trace] 0

@@ -6,10 +6,10 @@ extern std::mutex mtx;
 /*
  * Simulation time used for trace purpose
  */
-vluint64_t sim_time;
+vluint64_t sim_time = 0;
 
 // Called by $time in Verilog
-double sc_time_stamp() { return main_time; }
+double sc_time_stamp() { return sim_time; }
 #endif
 
 AXISimulatorDriver::AXISimulatorDriver() {
@@ -20,7 +20,7 @@ AXISimulatorDriver::AXISimulatorDriver() {
 
   top->trace(tfp, 99);
 
-  tfp->open("log/simx.vcd");
+  tfp->open("logs/simx.vcd");
 
   sim_time = 0;
 #endif
@@ -96,7 +96,7 @@ bool AXISimulatorDriver::init() {
   top->clk_i = 0;
 
   top->rst_ni = 0;
-  clock(5);
+  clock(100);
 
   top->rst_ni = 1;
   clock(1);
@@ -192,7 +192,7 @@ void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
 
   // deassert ready for response
   top->write_resp_ready = 0;
-  clock(100);
+  clock(1);
 
   mtx.unlock();
 }

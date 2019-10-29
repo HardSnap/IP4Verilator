@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="" key="top_wrapper_hw_platform_0-offSet"/>
+	<item value="top_wrapper_hw_platform_0" key="programflash.hwplatform"/>
+	<item value="qspi-x1-single" key="top_wrapper_hw_platform_0-flashType"/>
+	<item value="true" key="top_wrapper_hw_platform_0-blankCheck"/>
+	<item value="Auto Detect" key="top_wrapper_hw_platform_0-device"/>
+	<item value="/home/nasm/Projects/hw-snp-use-case/build/top.sdk/fsbl/Release/fsbl.elf" key="top_wrapper_hw_platform_0-fsblFile"/>
+	<item value="true" key="top_wrapper_hw_platform_0-verifyFlash"/>
+	<item value="/home/nasm/Projects/hw-snp-use-case/build/top.sdk/fsbl/bootimage/BOOT.bin" key="top_wrapper_hw_platform_0-imgFile"/>
+	<item value="Local" key="top_wrapper_hw_platform_0-target"/>
+</section>

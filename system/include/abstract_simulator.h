@@ -49,6 +49,16 @@ public:
   virtual bool init() = 0;
 
   /*
+   * Brief: select the expected mem interface from the multiplexer
+   */
+  virtual void select(uint32_t id) = 0;
+
+  /*
+   * Brief: check pending interrupt
+   */
+  virtual bool has_pending_irq() = 0;
+
+  /*
    * Brief: Initialize thread and return pointer to it
    */
   virtual std::thread *start() = 0;

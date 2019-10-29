@@ -1,0 +1,11 @@
+{
+    "memory_model" : [
+      { "name": "AES", "base" : "43c00000", "size": "FF", "read_only": false, "strategy": "forwarded", "target": "verilator"},
+      { "name": "SHA", "base" : "43c10000", "size": "FF", "read_only": false, "strategy": "forwarded", "target": "verilator"},
+      { "name": "PIC", "base" : "43c20000", "size": "FF", "read_only": false, "strategy": "forwarded", "target": "verilator"}
+    ],
+    "targets" : [
+      { "name": "verilator", "destination": "verilator", "binary": "/home/nasm/Projects/IP4Verilator/WALL_SYSTEM/sim/simu", "args": ""}
+    ]
+}
+

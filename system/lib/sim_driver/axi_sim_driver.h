@@ -64,6 +64,11 @@ public:
   bool init();
 
   /*
+   * Brief: select the expected mem interface from the multiplexer
+   */
+  void select(uint32_t id);
+
+  /*
    * Brief: Initialize thread and return pointer to it
    */
   std::thread *start();

@@ -57,6 +57,7 @@ int main(int argc, char **argv) {
   else
     spdlog::info("Self test ok!");
 
+  return 0;
   /*
    * TODO: To handle burst accesses, the simulator has a FIFO where commands are
    * stored So that, the external interface can always accept commands while the
@@ -100,56 +101,84 @@ int main(int argc, char **argv) {
 
 bool execute_self_test() {
 
-  // SimulatorDriver *sim = new SimulatorDriver();
-  //
-  // sim->init();
-  //
-  // // std::cout << "[TEST] Computing hash for string 'abc'" << std::endl;
-  // sim->input(0x61626380, 20);
-  // sim->input(0x00000000, 24);
-  // sim->input(0x00000000, 28);
-  // sim->input(0x00000000, 32);
-  // sim->input(0x00000000, 36);
-  // sim->input(0x00000000, 40);
-  // sim->input(0x00000000, 44);
-  // sim->input(0x00000000, 48);
-  // sim->input(0x00000000, 52);
-  // sim->input(0x00000000, 56);
-  // sim->input(0x00000000, 60);
-  // sim->input(0x00000000, 64);
-  // sim->input(0x00000000, 68);
-  // sim->input(0x00000000, 72);
-  // sim->input(0x00000000, 76);
-  // sim->input(0x00000018, 80);
-  //
-  // sim->input(0x00000005, 4);
-  // sim->input(0x00000004, 4);
-  //
-  // do {
-  //   sim->clock(1);
-  // } while (sim->output(0) == 0);
-  //
-  // unsigned int expected_hash[] = {0xba7816bf, 0x8f01cfea, 0x414140de,
-  //                                 0x5dae2223, 0xb00361a3, 0x96177a9c,
-  //                                 0xb410ff61, 0xf20015ad};
-  //
-  // // std::cout << "[TEST] Comparing result" << std::endl;
-  // for (int i = 0; i < 8; i++) {
-  //   unsigned int chunk = sim->output(84 + (i * 4));
-  //
-  //   if (chunk != expected_hash[7 - i]) {
-  //     sim->shutdown();
-  //     return false;
-  //   }
-  //   // else
-  //   //   std::cout << std::hex << chunk << "-";
-  // }
-  // // std::cout << std::endl;
-  //
-  // sim->shutdown();
-  //
-  // // std::cout << "[TEST] Success" << std::endl;
-  //
+  AbstractSimulator *sim = new AXISimulatorDriver();
+  
+  sim->init();
+  
+  sim->input(0x00000000, 0);
+   
+  std::cout << "[TEST] Loading key0" << std::endl;
+  sim->input(0x28aed2a6, 20+0 );
+  sim->input(0x2b7e1516, 20+4 );
+  sim->input(0x09cf4f3c, 20+8 );
+  sim->input(0xabf71588, 20+12);
+  sim->input(0x28aed2a6, 20+16);
+  sim->input(0x2b7e1516, 20+20);
+
+  std::cout << "[TEST] Loading key1" << std::endl;
+  sim->input(0x28aed2a6, 0x50 + 0 );
+  sim->input(0x2b7e1516, 0x50 + 4 );
+  sim->input(0x09cf4f3c, 0x50 + 8 );
+  sim->input(0xabf71588, 0x50 + 12);
+  sim->input(0x28aed2a6, 0x50 + 16);
+  sim->input(0x2b7e1516, 0x50 + 20);
+  
+  std::cout << "[TEST] Loading key2" << std::endl;
+  sim->input(0x28aed2a6, 0x68 + 0 );
+  sim->input(0x2b7e1516, 0x68 + 4 );
+  sim->input(0x09cf4f3c, 0x68 + 8 );
+  sim->input(0xabf71588, 0x68 + 12);
+  sim->input(0x28aed2a6, 0x68 + 16);
+  sim->input(0x2b7e1516, 0x68 + 20);
+ 
+  //Set key select
+  std::cout << "[TEST] Setting active key 0" << std::endl;
+  sim->input(0x00000000, 0x80);
+  // Set PT 
+  std::cout << "[TEST] Setting plain text" << std::endl;
+  sim->input(0x66667777, 0x4);
+  sim->input(0x44445555, 0x4+4);
+  sim->input(0x22223333, 0x4+8);
+  sim->input(0x00001111, 0x4+12);
+  // Set st 
+  std::cout << "[TEST] Setting st" << std::endl;
+  sim->input(0x3243f6a8, 0x40);
+  sim->input(0x885a308d, 0x40+4);
+  sim->input(0x313198a2, 0x40+8);
+  sim->input(0xe0370734, 0x40+12);
+
+
+  // SET CONTROL -> NEXT
+  std::cout << "[TEST] Starting process" << std::endl;
+  sim->input(0x00000001, 0); 
+  sim->input(0x00000000, 0);
+
+  do {
+    sim->clock(1);
+  } while (sim->output(0xB*4) == 0);
+  std::cout << "[TEST] Done" << std::endl;
+  
+  unsigned int expected_hash[] = {0x4fcb9ca9, 0x75a691f2, 0xff338e2b, 0xb85460db};
+  
+  std::cout << "[TEST] Comparing result" << std::endl;
+  for (int i = 0; i < 4; i++) {
+    unsigned int chunk = sim->output(30 + (i * 4));
+ 
+    printf("%08x\n", chunk);
+    //if (chunk != expected_hash[4 - i]) {
+    //  sim->shutdown();
+    //  return false;
+    //}
+  }
+  
+  for(int i=0; i<0x20; i++) {
+    printf("Reg[%x] = %08x\n", i, sim->output(i*4));
+  }
+  
+  sim->shutdown();
+  
+  std::cout << "[TEST] Success" << std::endl;
+  
   return true;
 }
 

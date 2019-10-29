@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<section name="Workbench">
+	<item value="/home/nasm/Projects/hw-snp-use-case/build/top.sdk/app/Release" key="bootgen_files_selection"/>
+	<item value="/home/nasm/Projects/hw-snp-use-case/build/top.sdk/fsbl/bootimage" key="zynq_flash_files_selection"/>
+	<item value="/home/nasm/Projects/hw-snp-use-case/build/top.sdk/fsbl/bootimage" key="last_stored_selection"/>
+</section>

@@ -22,13 +22,15 @@ class AbstractNet;
 class Target {
 public:
   AbstractSimulator *sim;
+  uint32_t select_id;
   uint32_t base_address;
   uint32_t size;
   std::thread *task;
 
-  Target(AbstractSimulator *_sim, uint32_t _base_address, uint32_t _size,
-         std::thread *_task)
-      : sim(_sim), base_address(_base_address), size(_size), task(_task){};
+  Target(uint32_t _select_id, AbstractSimulator *_sim, uint32_t _base_address,
+         uint32_t _size, std::thread *_task)
+      : select_id(_select_id), sim(_sim), base_address(_base_address),
+        size(_size), task(_task){};
 };
 
 class SimulatorSystem {
@@ -52,8 +54,8 @@ public:
 
   void shutdown();
 
-  bool append_target(AbstractSimulator *_sim, uint32_t _base_address,
-                     uint32_t _size);
+  bool append_target(AbstractSimulator *_sim, uint32_t _select_id,
+                     uint32_t _base_address, uint32_t _size);
 
   bool set_network(AbstractNet *_net);
 

@@ -128,7 +128,7 @@ void AXISimulatorDriver::run() {
 void AXISimulatorDriver::input(uint32_t data, uint32_t address) {
   mtx.lock();
 
-  printf("AXISimulatorDriver: writing %08x to %08x\n", data, address);
+  //printf("AXISimulatorDriver: writing %08x to %08x\n", data, address);
 
   // #3 write_addr <= addr;	//Put write address on bus
   top->write_addr = address;
@@ -227,7 +227,7 @@ uint32_t AXISimulatorDriver::output(uint32_t address) {
 
   mtx.unlock();
 
-  printf("AXISimulatorDriver: reading from %08x -> %08x\n", address, res);
+  //printf("AXISimulatorDriver: reading from %08x -> %08x\n", address, res);
 
   return res;
 }

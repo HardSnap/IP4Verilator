@@ -1,0 +1,23 @@
+{
+  "Board" : "MyBoard",
+  "Analyzer":[
+    {"HardwareSnapshotting": 1},
+    {"DynamicInterruptTable": 1},
+    {"Redirection": 0},
+    {"Debugger"   : 0},
+    {"BinaryPath" : "TEST_CASE-llvm-3.62.elf"},
+    {"OutputDirectory" : "/media/nasm/toshi/hw-snapshotting/IP4Verilator/AES_CTR_1.0/sw/img"}
+  ],
+  "HardwareEnvironment":[
+    { "name": "aes_crt_simulator", "pid": 25857, "platform": "verilator", "command": "/media/nasm/toshi/hw-snapshotting/IP4Verilator/AES_CTR_1.0/sim/simu"}
+  ],
+  "SpecialMemory" : [
+    { "name": "AES_CRT", "base" : "43c00000", "size": "3FFF", "destination": "aes_crt_simulator", "strategy" : "forwarded"}
+  ],
+  "Interrupt" : [
+    { "name": "MEMFAULT", "frequency": "high", "id" : 1, "priority_g" : "0", "priority": "0", "handler": "MemFault_Handler"},
+    { "name": "HARDFAULT","frequency": "high", "id" : 3, "priority_g" : "0", "priority": "0", "handler": "HardFault_Handler"}
+  ]
+}
+
+

@@ -16,6 +16,10 @@ public:
 
   virtual void send(uint32_t data) = 0;
 
+  virtual void irq() = 0;
+
+  virtual void is_ack_irq() = 0;
+
   virtual Message *receive() = 0;
 };
 #endif
