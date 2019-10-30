@@ -33,8 +33,10 @@ VM_PREFIX = Vtop
 VM_MODPREFIX = Vtop
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-O3 \
+	-g3 \
+	-O0 \
 	-std=c++11 \
+	-DTRACE \
 	-I../../tb/ \
 	-I../../../system/include \
 

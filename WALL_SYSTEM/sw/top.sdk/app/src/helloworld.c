@@ -65,7 +65,9 @@ void ERRORHandler() {
   printf("ERROR!!!!!!!");
 }
 
-uint32_t interrupt_vector[]  __attribute__((section(".interrupt_vector"))) = {0x10000000, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, SHA_Handler, AES_Handler, ERRORHandler, ERRORHandler};
+//uint32_t interrupt_vector[]  __attribute__((section(".interrupt_vector"))) = {0x10000000, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, AES_Handler, SHA_Handler, ERRORHandler, ERRORHandler};
+//uint32_t interrupt_vector[]  __attribute__((section(".interrupt_vector"))) = {0x10000000, 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
+//uint32_t interrupt_vector[]  __attribute__((section(".interrupt_vector"))) = {0x10000000, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, ERRORHandler, AES_Handler, SHA_Handler, ERRORHandler, ERRORHandler};
 
 void test_sha256(unsigned int test_id) {
     unsigned int buf[8] = {0};
@@ -123,52 +125,11 @@ volatile unsigned int* IRQ_BASE = (volatile unsigned int*)0x43c20000;
 
 int main()
 {
-    //init_uart();
-    //Xil_DCacheDisable();
-    //Xil_ICacheDisable();
-
     IRQ_BASE[0] = 1;
-
-    printf("Hello World\n\r");
-
-    //clear SRAM
-    //for(unsigned int i=0; i<0x8000; i++) {
-    //	*((volatile unsigned int*)0x10000000+i) = 0;
-    //}
-
-	unsigned int hash[8] = {0};
-
-	unsigned int snp1_hash[8] = {0xba7816bf, 0x8f01cfea, 0x414140de, 0x5dae2223, 0xb00361a3, 0x96177a9c, 0xb410ff61, 0xf20015ad};
-	unsigned int snp2_hash[8] = {0xe3b0c442, 0x98fc1c14, 0x9afbf4c8, 0x996fb924, 0x27ae41e4, 0x649b934c, 0xa495991b, 0x7852b855};
-
-    // Compute hash for "abc", expect snp1_hash as result
     test_sha256(0);
-
-    // Save hw snapshot at 0x10000000 with size 1088
-    //unsigned snp1 = create_hw_snapshot(0x10000000, 10752);
-
-    // Read digest and check that it is as expected : snp1_hash
-    read_digest(hash);
-	if(memcmp(hash, snp1_hash, 32) != 0) {
-		//error case
-		exit(1);
-	}
-
-	// Change hardware state by computing hash for ""
     test_sha256(1);
-
-    // Reload snapshot 1
-    //unsigned int snp2 = 0x10008000;
-    //load_hw_snapshot(snp1, snp2, 10752);
-
-    // SNapshot 1 has been reloaded, so expected result is snp1_hash and not snp2_hash
-    // Read digest and check that it is as expected : snp1_hash
-    //read_digest(hash);
-//	if(memcmp(hash, snp1_hash, 32) != 0) {
-		//error case
-//		while(1);
-//	}
-
-  //  cleanup_platform();
+    test_sha256(2);
+    test_sha256(3);
+    test_sha256(4);
     return 0;
 }

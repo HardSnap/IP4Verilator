@@ -297,7 +297,7 @@ module top(
 		.C_S_AXI_DATA_WIDTH(32),
 		.C_S_AXI_ADDR_WIDTH(32)
 	) pic_axi_interface_inst (
-    .interrupt_request({sha_interrupt, aes_interrupt, 6'b000000}), //interrupt5, interrupt4, interrupt3, interrupt2, interrupt1, interrupt0}),
+    .interrupt_request({sha_interrupt, 7'b0000000}), //interrupt5, interrupt4, interrupt3, interrupt2, interrupt1, interrupt0}),
     .irq_ack(irq_ack),
     .irq_rq(irq_rq),
 

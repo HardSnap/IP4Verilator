@@ -11,6 +11,7 @@
 #include "verilated.h"
 
 class Vtop__Syms;
+class VerilatedVcd;
 
 //----------
 
@@ -51,22 +52,31 @@ VL_MODULE(Vtop) {
     // Anonymous structures to workaround compiler member-count bugs
     struct {
         // Begin mtask footprint all: 
+        VL_SIG8(top__DOT__write_prot_sha,2,0);
         VL_SIG8(top__DOT__write_addr_valid_sha,0,0);
         VL_SIG8(top__DOT__write_strb_sha,3,0);
         VL_SIG8(top__DOT__write_data_valid_sha,0,0);
+        VL_SIG8(top__DOT__write_data_ready_sha,0,0);
         VL_SIG8(top__DOT__write_resp_ready_sha,0,0);
+        VL_SIG8(top__DOT__read_prot_sha,2,0);
         VL_SIG8(top__DOT__read_addr_valid_sha,0,0);
         VL_SIG8(top__DOT__read_data_ready_sha,0,0);
+        VL_SIG8(top__DOT__write_prot_aes,2,0);
         VL_SIG8(top__DOT__write_addr_valid_aes,0,0);
         VL_SIG8(top__DOT__write_strb_aes,3,0);
         VL_SIG8(top__DOT__write_data_valid_aes,0,0);
+        VL_SIG8(top__DOT__write_data_ready_aes,0,0);
         VL_SIG8(top__DOT__write_resp_ready_aes,0,0);
+        VL_SIG8(top__DOT__read_prot_aes,2,0);
         VL_SIG8(top__DOT__read_addr_valid_aes,0,0);
         VL_SIG8(top__DOT__read_data_ready_aes,0,0);
+        VL_SIG8(top__DOT__write_prot_pic,2,0);
         VL_SIG8(top__DOT__write_addr_valid_pic,0,0);
         VL_SIG8(top__DOT__write_strb_pic,3,0);
         VL_SIG8(top__DOT__write_data_valid_pic,0,0);
+        VL_SIG8(top__DOT__write_data_ready_pic,0,0);
         VL_SIG8(top__DOT__write_resp_ready_pic,0,0);
+        VL_SIG8(top__DOT__read_prot_pic,2,0);
         VL_SIG8(top__DOT__read_addr_valid_pic,0,0);
         VL_SIG8(top__DOT__read_data_ready_pic,0,0);
         VL_SIG8(top__DOT__write_resp_reg,1,0);
@@ -106,6 +116,8 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__t_ctr_reg,5,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__t_ctr_new,5,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__t_ctr_we,0,0);
+    };
+    struct {
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__t_ctr_inc,0,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__t_ctr_rst,0,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__digest_valid_reg,0,0);
@@ -115,8 +127,6 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__sha256_ctrl_new,1,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__sha256_ctrl_we,0,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__digest_init,0,0);
-    };
-    struct {
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__digest_update,0,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__state_init,0,0);
         VL_SIG8(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__state_update,0,0);
@@ -141,6 +151,7 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__intr_rq_reg,7,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__intr_ack_bus,7,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__state_reg,1,0);
+        VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__padding,3,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__pic_core_inst__DOT__state_reg,3,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__pic_core_inst__DOT__state_next,3,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__pic_core_inst__DOT__intrIndex_reg,2,0);
@@ -171,18 +182,23 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg4,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg5,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg6,31,0);
+    };
+    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg7,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg8,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg9,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg10,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg11,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg12,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg13,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg14,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg15,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg16,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg17,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg18,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg19,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg20,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg21,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg22,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg23,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg24,31,0);
@@ -195,6 +211,7 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg31,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__slv_reg32,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__reg_data_out,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__byte_index,31,0);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__key_big,191,0,6);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__ct,127,0,4);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__out_temp,127,0,4);
@@ -231,6 +248,8 @@ VL_MODULE(Vtop) {
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k6b,127,0,4);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k7b,127,0,4);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k8b,127,0,4);
+    };
+    struct {
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k9b,127,0,4);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k10b,127,0,4);
         VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__k11b,127,0,4);
@@ -247,8 +266,6 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__v2,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__v3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__v4,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__k0a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__k1a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a1__DOT__k2a,31,0);
@@ -297,6 +314,8 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k1a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k2a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k3a,31,0);
+    };
+    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k4a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k5a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a5__DOT__k0b,31,0);
@@ -313,8 +332,6 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k3a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k4a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k5a,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k0b,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k1b,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a6__DOT__k6a,31,0);
@@ -362,6 +379,9 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a10__DOT__k3a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a10__DOT__k4a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a10__DOT__k5a,31,0);
+        VL_SIGW(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__out_1,191,0,6);
+    };
+    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__v0,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__v1,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__v2,31,0);
@@ -369,6 +389,8 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k1a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k2a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k3a,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k4a,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k5a,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k0b,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k1b,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a11__DOT__k2b,31,0);
@@ -379,8 +401,6 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p02,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p03,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p10,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p11,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p12,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__p13,31,0);
@@ -426,6 +446,8 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__p33,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__p00,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__p01,31,0);
+    };
+    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__p02,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__p03,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__p10,31,0);
@@ -445,8 +467,6 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p02,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p03,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p10,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p11,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p12,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__p13,31,0);
@@ -492,6 +512,8 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__p33,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__p00,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__p01,31,0);
+    };
+    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__p02,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__p03,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__p10,31,0);
@@ -511,8 +533,6 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p02,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p03,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p10,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p11,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p12,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__p13,31,0);
@@ -556,12 +576,43 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__p31,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__p32,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__p33,31,0);
+        VL_SIGW(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__digest_reg,255,0,8);
         VL_SIGW(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core_block,511,0,16);
+    };
+    struct {
         VL_SIGW(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core_digest,255,0,8);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__axi_awaddr,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__axi_araddr,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__axi_rdata,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg0,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg1,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg2,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg3,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg4,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg5,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg6,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg7,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg8,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg9,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg10,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg11,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg12,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg13,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg14,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg15,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg16,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg17,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg18,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg19,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg20,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg21,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg22,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg23,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg24,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg25,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg26,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg27,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg28,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg29,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg30,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg31,31,0);
@@ -572,13 +623,13 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg36,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__slv_reg37,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__reg_data_out,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__byte_index,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__write_mem__DOT__i,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__a_reg,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__a_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__b_reg,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__b_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__c_reg,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__c_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__d_reg,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__d_new,31,0);
@@ -593,6 +644,8 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H0_reg,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H0_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H1_reg,31,0);
+    };
+    struct {
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H1_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H2_reg,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__H2_new,31,0);
@@ -630,6 +683,7 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem14_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem15_new,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_new,31,0);
+        VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__reg_update__DOT__i,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem_update_logic__DOT__w_0,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem_update_logic__DOT__w_1,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem_update_logic__DOT__w_9,31,0);
@@ -642,10 +696,11 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg0,31,0);
         VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg1,31,0);
         VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg2,31,0);
+        VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg3,31,0);
         VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg4,31,0);
-    };
-    struct {
         VL_SIG(top__DOT__pic_axi_interface_inst__DOT__slv_reg5,31,0);
+        VL_SIG(top__DOT__pic_axi_interface_inst__DOT__byte_index,31,0);
+        VL_SIG(top__DOT__pic_axi_interface_inst__DOT__pic_core_inst__DOT__i,31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__block_reg[16],31,0);
         VL_SIG(top__DOT__sha256_v1_0__DOT__sha256_v1_0_S00_AXI_inst__DOT__core__DOT__w_mem_inst__DOT__w_mem[16],31,0);
         VL_SIG8(top__DOT__pic_axi_interface_inst__DOT__pic_core_inst__DOT__prior_table_next[8],2,0);
@@ -657,7 +712,6 @@ VL_MODULE(Vtop) {
     // Anonymous structures to workaround compiler member-count bugs
     struct {
         // Begin mtask footprint all: 
-        VL_SIG8(top__DOT____Vcellinp__pic_axi_interface_inst__interrupt_request,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a0__DOT__S4_0__DOT____Vcellout__S_0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a0__DOT__S4_0__DOT____Vcellout__S_1____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a0__DOT__S4_0__DOT____Vcellout__S_2____pinNumber3,7,0);
@@ -721,9 +775,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r1__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t0__DOT__t0__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t0__DOT__t0__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t0__DOT__t1__DOT____Vcellout__s0____pinNumber3,7,0);
@@ -787,9 +841,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT__t0__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT__t0__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT__t1__DOT____Vcellout__s0____pinNumber3,7,0);
@@ -853,9 +907,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r5__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t0__DOT__t0__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t0__DOT__t0__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t0__DOT__t1__DOT____Vcellout__s0____pinNumber3,7,0);
@@ -919,9 +973,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r7__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__t0__DOT__t0__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__t0__DOT__t0__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r8__DOT__t0__DOT__t1__DOT____Vcellout__s0____pinNumber3,7,0);
@@ -985,9 +1039,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t0__DOT__t0__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t0__DOT__t0__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t0__DOT__t1__DOT____Vcellout__s0____pinNumber3,7,0);
@@ -1051,9 +1105,9 @@ VL_MODULE(Vtop) {
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT__t2__DOT____Vcellout__s0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT__t2__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT__t3__DOT____Vcellout__s0____pinNumber3,7,0);
+        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
     };
     struct {
-        VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT__t3__DOT____Vcellout__s4____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__rf__DOT__S4_1__DOT____Vcellout__S_0____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__rf__DOT__S4_1__DOT____Vcellout__S_1____pinNumber3,7,0);
         VL_SIG8(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__rf__DOT__S4_1__DOT____Vcellout__S_2____pinNumber3,7,0);
@@ -1117,9 +1171,9 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r3__DOT__t3__DOT____Vcellout__t2____pinNumber3,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT____Vcellout__t0____pinNumber3,31,0);
     };
     struct {
-        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t0__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r4__DOT__t1__DOT____Vcellout__t0____pinNumber3,31,0);
@@ -1183,9 +1237,9 @@ VL_MODULE(Vtop) {
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t0__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t0__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t1__DOT____Vcellout__t0____pinNumber3,31,0);
+        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t1__DOT____Vcellout__t1____pinNumber3,31,0);
     };
     struct {
-        VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t1__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t1__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t2__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r9__DOT__t2__DOT____Vcellout__t1____pinNumber3,31,0);
@@ -1249,9 +1303,9 @@ VL_MODULE(Vtop) {
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t1__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t2__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t2__DOT____Vcellout__t1____pinNumber3,31,0);
+        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
     };
     struct {
-        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t3__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t3__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r2__DOT__t3__DOT____Vcellout__t2____pinNumber3,31,0);
@@ -1315,9 +1369,9 @@ VL_MODULE(Vtop) {
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t1__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t2__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t2__DOT____Vcellout__t1____pinNumber3,31,0);
+        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
     };
     struct {
-        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t3__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t3__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r6__DOT__t3__DOT____Vcellout__t2____pinNumber3,31,0);
@@ -1381,9 +1435,9 @@ VL_MODULE(Vtop) {
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t1__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t2__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t2__DOT____Vcellout__t1____pinNumber3,31,0);
+        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
     };
     struct {
-        VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t2__DOT____Vcellout__t2____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t3__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t3__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r10__DOT__t3__DOT____Vcellout__t2____pinNumber3,31,0);
@@ -1403,6 +1457,7 @@ VL_MODULE(Vtop) {
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT____Vcellout__t0____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT____Vcellout__t1____pinNumber3,31,0);
         VL_SIG(__Vchglast__TOP__top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__r11__DOT__t3__DOT____Vcellout__t2____pinNumber3,31,0);
+        VL_SIG(__Vm_traceActivity,31,0);
     };
     static VL_ST_SIG8(__Vtable1_top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a0__DOT__S4_0__DOT____Vcellout__S_0____pinNumber3[256],7,0);
     static VL_ST_SIG8(__Vtable2_top__DOT__AES_CTR_v1_0__DOT__AES_CTR_v1_0_S00_AXI_inst__DOT__aes__DOT__uut__DOT__a0__DOT__S4_0__DOT____Vcellout__S_1____pinNumber3[256],7,0);
@@ -1823,6 +1878,8 @@ VL_MODULE(Vtop) {
     Vtop(const char* name="TOP");
     /// Destroy the model; called (often implicitly) by application code
     ~Vtop();
+    /// Trace signals in the model; called by application code
+    void trace(VerilatedVcdC* tfp, int levels, int options=0);
     
     // API METHODS
     /// Evaluate the model.  Application must call when inputs change.
@@ -1838,7 +1895,8 @@ VL_MODULE(Vtop) {
   private:
     static QData _change_request(Vtop__Syms* __restrict vlSymsp);
   public:
-    static void _combo__TOP__4(Vtop__Syms* __restrict vlSymsp);
+    static void _combo__TOP__1(Vtop__Syms* __restrict vlSymsp);
+    static void _combo__TOP__5(Vtop__Syms* __restrict vlSymsp);
   private:
     void _ctor_var_reset() VL_ATTR_COLD;
   public:
@@ -1850,9 +1908,25 @@ VL_MODULE(Vtop) {
   public:
     static void _eval_initial(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
     static void _eval_settle(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
-    static void _sequent__TOP__1(Vtop__Syms* __restrict vlSymsp);
-    static void _sequent__TOP__2(Vtop__Syms* __restrict vlSymsp);
-    static void _settle__TOP__3(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+    static void _sequent__TOP__3(Vtop__Syms* __restrict vlSymsp);
+    static void _sequent__TOP__4(Vtop__Syms* __restrict vlSymsp);
+    static void _settle__TOP__2(Vtop__Syms* __restrict vlSymsp) VL_ATTR_COLD;
+    static void traceChgThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__2(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__3(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__4(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__5(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__6(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__7(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__8(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceChgThis__9(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code);
+    static void traceFullThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code) VL_ATTR_COLD;
+    static void traceFullThis__1(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code) VL_ATTR_COLD;
+    static void traceInitThis(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code) VL_ATTR_COLD;
+    static void traceInitThis__1(Vtop__Syms* __restrict vlSymsp, VerilatedVcd* vcdp, uint32_t code) VL_ATTR_COLD;
+    static void traceInit(VerilatedVcd* vcdp, void* userthis, uint32_t code);
+    static void traceFull(VerilatedVcd* vcdp, void* userthis, uint32_t code);
+    static void traceChg(VerilatedVcd* vcdp, void* userthis, uint32_t code);
 } VL_ATTR_ALIGNED(128);
 
 #endif // guard

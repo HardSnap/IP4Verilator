@@ -5,9 +5,7 @@
 #include <string>
 
 typedef struct {
-  uint8_t irq_in;
-  uint8_t irq_ack;
-
+  uint8_t irq_status;
   uint32_t address;
   uint8_t  type;
   uint32_t value;
@@ -16,8 +14,6 @@ typedef struct {
 
 bool MKFifo::init() {
   int res;
-
-  std::cout << "MKFIFO init" << std::endl;
 
   const char *sync_path = "/sync_fifo";
 
@@ -33,11 +29,20 @@ bool MKFifo::init() {
 
   // Map the shared memory in this process
   sync_mem_ptr =
-      (u_char *)mmap(NULL, 14, PROT_READ | PROT_WRITE, MAP_SHARED, sync_mem, 0);
+      (u_char *)mmap(NULL, 512, PROT_READ | PROT_WRITE, MAP_SHARED, sync_mem, 0);
   if (sync_mem_ptr == MAP_FAILED) {
     spdlog::error("Unable to map shared memory to current program");
     return false;
   }
+
+  IPC_MESSAGE* ipc = (IPC_MESSAGE*) sync_mem_ptr;
+  ipc->irq_status = 0;
+  ipc->address    = 0;
+  ipc->type       = 0;
+  ipc->value      = 0;
+  ipc->status     = 0;
+  
+  std::cout << "target init done" << std::endl;
 
   return true;
 }
@@ -76,10 +81,21 @@ Message *MKFifo::receive() {
   //printf("One packet received on cmd_fifo: address:%08x data:%08x\n", address, data_in);
 }
 
+bool MKFifo::has_irq_ack() {
+
+  IPC_MESSAGE* ipc = (IPC_MESSAGE*) sync_mem_ptr;
+
+  if( ipc->irq_status == 'K' ) { 
+    ipc->irq_status = 'D';
+    return true;
+  } else {
+    return false; 
+  }
+}
+
 void MKFifo::irq() {
 
   IPC_MESSAGE* ipc = (IPC_MESSAGE*) sync_mem_ptr;
 
-  ipc->irq_in = 1;
-  while(ipc->irq_in != 0);
+  ipc->irq_status = 'P';
 }

@@ -77,12 +77,7 @@ public:
   /*
    * Brief: acknowledge active irq
    */
-  void ack_active_irq();
-
-   /*
-   * Brief: Initialize thread and return pointer to it
-   */
-  std::thread *start();
+  void ack_irq();
 
   /*
    * Brief: wrapper around the verilator eval function that enables custom verification at each eval call

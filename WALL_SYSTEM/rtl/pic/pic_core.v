@@ -320,7 +320,7 @@ module pic_core(
             // Once this has been acknowledged, the controller returns to check the interrrupt sources.
             S_AckISRDonePriority: begin // 4'b1010
                 // If the proper source and condition has been acknowleged, check next interrupt.
-                if ((~intr_in) && (intr_ack_bus[7:3] == 5'b01100) && (intr_ack_bus[2:0] == intrPtr_reg)) begin
+                if ((intr_in) && (intr_ack_bus[7:3] == 5'b01100) && (intr_ack_bus[2:0] == intrPtr_reg)) begin
                     state_next  =   S_StartPriority;
                 end
                 // Else, the controller assumes this to be an error. (If the condition codes are wrong).

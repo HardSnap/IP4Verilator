@@ -59,9 +59,9 @@ public:
   virtual bool has_pending_irq() = 0;
 
   /*
-   * Brief: Initialize thread and return pointer to it
+   * Brief: acknowledge active irq
    */
-  virtual std::thread *start() = 0;
+  virtual void ack_irq() = 0;
 };
 
 #endif

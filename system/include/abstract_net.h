@@ -18,7 +18,7 @@ public:
 
   virtual void irq() = 0;
 
-  virtual void is_ack_irq() = 0;
+  virtual bool has_irq_ack() = 0;
 
   virtual Message *receive() = 0;
 };

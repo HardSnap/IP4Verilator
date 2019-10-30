@@ -54,11 +54,11 @@ int main(int argc, char **argv) {
   spdlog::info("Company: EURECOM");
 
   // test the hardware model
-  spdlog::info("Starting self test...");
-  if (!execute_self_test_sha() || !execute_self_test_aes())
-    spdlog::error("Self test failed...");
-  else
-    spdlog::info("Self test ok!");
+  //spdlog::info("Starting self test...");
+  //if (!execute_self_test_sha() || !execute_self_test_aes())
+  //  spdlog::error("Self test failed...");
+  //else
+  //  spdlog::info("Self test ok!");
 
   /*
    * TODO: To handle burst accesses, the simulator has a FIFO where commands are
@@ -88,19 +88,26 @@ int main(int argc, char **argv) {
   }
   spdlog::info("Network inteface is up.");
 
-  if (!sys->append_target(simulator, 0, 0x43C00000, 0xFF)) {
+  if (!sys->set_simulator(simulator)) {
+    spdlog::error("Unable to init simulator");
+    return 0;
+  }
+  spdlog::info("Simulator is up.");
+
+
+  if (!sys->append_target(0, 0x43C00000, 0xFF)) {
     spdlog::error("Unable to init simulator");
     return 0;
   }
   spdlog::info("Adding target simulator.");
 
-  if (!sys->append_target(simulator, 1, 0x43C10000, 0xFF)) {
+  if (!sys->append_target(1, 0x43C10000, 0xFF)) {
     spdlog::error("Unable to init simulator");
     return 0;
   }
   spdlog::info("Adding target simulator.");
 
-  if (!sys->append_target(simulator, 2, 0x43C20000, 0xFF)) {
+  if (!sys->append_target(2, 0x43C20000, 0xFF)) {
     spdlog::error("Unable to init simulator");
     return 0;
   }

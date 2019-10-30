@@ -460,8 +460,7 @@
 
     localparam  [1:0]   IDLE                 = 4'b00,
                         ACTIVE_IRQ           = 4'b01,
-                        WAIT_ACK             = 4'b10,
-                        DONE                 = 4'b11;
+                        WAIT_ACK             = 4'b10;
 
     reg [1:0] state_reg;
     reg [3:0] padding;
@@ -482,12 +481,14 @@
             case(state_reg)
             IDLE:
             begin
+                intr_ack_bus[7:0]  <= {8'b00000000};
                 if( intr_out == 1'b1 )
                 begin
                     // IRQ active
                     intr_in        <= 1'b0;
                     state_reg      <= ACTIVE_IRQ;
                 end else begin
+                    intr_in        <= 1'b1;
                     state_reg      <= IDLE;
                 end        
             end
@@ -498,7 +499,7 @@
             WAIT_ACK:
             begin
                 // IRQ active, wait ack
-                if( (irq_ack == 1'b1) || (slv_reg0[2] == 1'b1) ) begin
+                if( (irq_ack == 1'b1) ) begin
                 
                     if( intr_mode == 2'b01 )
                         intr_ack_bus[7:0]  <= {5'b10100, current_irq};
@@ -506,23 +507,11 @@
                         intr_ack_bus[7:0]  <= {5'b01100, current_irq};
                     intr_in            <= 1'b0;
                     intr_rq_reg[current_irq] <= 1'b0;
-                    state_reg          <= DONE;
+                    state_reg          <= IDLE;
                 end else begin
                     intr_in          <= 1'b0;
                     state_reg        <= WAIT_ACK;
                 end        
-            end
-            DONE:
-            begin
-                   // Wait until user pulse the irq ack bit
-                   // This avoid synchronisation issues
-                   if( (irq_ack == 1'b0) ) //&& (slv_reg0[2] == 1'b1) )
-                   begin
-                        intr_in        <= 1'b1;
-                        state_reg      <= IDLE;        
-                   end else begin
-                        state_reg      <= DONE;
-                   end
             end
             default:
             begin

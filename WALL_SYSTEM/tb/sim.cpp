@@ -51,29 +51,29 @@ void AXISimulatorDriver::eval() {
   top->eval();
 
   /*
-   * We need to detect phase shifting since 
-   * irq_in could stay longer than a clock and eval 
+   * We need to detect phase shifting since
+   * irq_in could stay longer than a clock and eval
    * could be called without shifting the clk phase
    */
   if( top->irq_rq == 1 && old_irq_phase == 0) {
-    old_irq_phase = 1; 
+    old_irq_phase = 1;
     pending_irq = true;
   } else {
-    old_irq_phase = top->irq_rq; 
+    old_irq_phase = top->irq_rq;
   }
 
 }
 
 bool AXISimulatorDriver::has_pending_irq() {
   if( pending_irq ) {
-    printf("PENDING IRQ !!!!");
+    printf("PENDING IRQ !!!!\n");
     pending_irq = false;
     return true;
   } else
     return false;
 }
 
-void AXISimulatorDriver::ack_active_irq() {
+void AXISimulatorDriver::ack_irq() {
     top->irq_ack = 1;
     clock(4);
     top->irq_ack = 0;
@@ -147,17 +147,6 @@ bool AXISimulatorDriver::init() {
   clock(1);
 
   return true;
-}
-
-std::thread *AXISimulatorDriver::start() {
-
-  // System cannot make the thread init since it is compiled before we define
-  // which SimulatorDriver we will use!
-  //std::thread task(&AXISimulatorDriver::run, this);
-  //task.detach();
-
-  //return &task;
-  return NULL;
 }
 
 void AXISimulatorDriver::run() {

@@ -37,9 +37,10 @@ ENTRY(main)
 
 SECTIONS
 {
- .interrupt_vector : {
-   KEEP (*(interrupt_vector))
- } > ps7_ddr_0
+
+.interrupt_vector : {
+   *(.cs3.interrupt_vector);
+} > ps7_ddr_0
 
 .text : {
    KEEP (*(.vectors))

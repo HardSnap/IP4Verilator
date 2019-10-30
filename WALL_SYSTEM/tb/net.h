@@ -26,6 +26,8 @@ public:
 
   void irq();
 
+  bool has_irq_ack();
+
   Message *receive();
 
 private:
